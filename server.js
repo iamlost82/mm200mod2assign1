@@ -11,10 +11,24 @@ app.listen(app.get('port'), function(){
 
 const users = [];
 
+function checkIfUserAlreadyExcist(email){
+    let response = true;
+    for(i in users){
+        if(users[i].email == email){
+            response = false;
+        }
+    }
+    return response;
+}
+
 app.post("/api/user", function(req,res){
     let user = req.body;
+    if(checkIfUserAlreadyExcist(user.email)===true){
     user.id = users.length + 1;
     users.push(user);
-
     res.json(user).end();
+    } else {
+        res.json({"Response":"User already created"}).end();
+    }
+    
 });
